@@ -23,11 +23,15 @@ class Automata:
         self.states[state.label] = state
         self.node_count = self.node_count + 1
 
+    # Retorna o estado inicial
+    def get_initial_state(self):
+        return self.initial_state
+
+
     # Adiciona uma nova transição entre `from_state` e `to_state` com `label` como descrição
     def add_transition(self, from_state, to_state, label):
         transition = Transition(from_state, to_state, label)
         self.transitions.add(transition)
-        self.states[from_state.label].out_transitions.add(transition)
 
     # Deleta uma transição de estados
     def delete_transition(self, transition):
@@ -70,58 +74,40 @@ class Automata:
 
     # Verifica se uma string é aceita pelo autômato
     def accept_string(self, text):
-        # Começa no estado inicial
-        current_state = self.initial_state
+        for transition in self.transitions:
+            transition.from_state.out_transitions.add(transition)
 
-        # Faz o processamento para cada caractere
-        for c in text:
+        text = list(text)
+        index = 0
+        start_state = self.get_initial_state()
+        return self.recursive_parser(text, index, start_state)
 
-            # Flags para validar transições epsilon
-            consume_character = False
-            epsilon_transitioned = False
+        
+    def recursive_parser(self, text, index, state):
+        for transition in state.out_transitions:
+            actual_state = state
+            if transition.label == '&':
+                if transition.to_state.final and index == len(text):
+                    return True
+                else:
+                    if not self.recursive_parser(text, index, transition.to_state):
+                        state = actual_state
+                    else:
+                        return True
 
-            # Tenta "consumir" o caractere procurando uma transição válida
-            while(not consume_character):
-
-                # Começa testanto as transições "normais" (não épsilon)
-                for transition in self.transitions:
-                    if transition.from_state == current_state:
-                        
-                        # Se for uma transição válida, consome o caractere e altera o estado
-                        if transition.label == c:
-                            current_state = transition.to_state
-                            consume_character = True
-                            epsilon_transitioned = False
-                            break
-
-                
-                # Se não tiver consumido o caractere, tenta as transições épsilon
-                if not consume_character and not epsilon_transitioned:
-                    for transition in self.transitions:
-                        if transition.from_state == current_state:
-
-                            # Se tiver uma transição épsilon válida, altera o estado, sem consumir caractere
-                            if transition.label == '&':
-                                current_state = transition.to_state
-                                epsilon_transitioned = True
-                                break
-
-                    # Se não encontrou transição épsilon, a string já não deve ser aceita
-                    if not epsilon_transitioned:
-                        return False
-                
-                # Se não tiver consumido e tiver vindo de uma transição épsilon, encerra o processamento
-                elif not consume_character:
+            if index < len(text) and transition.label == text[index]:
+                index = index + 1
+                if transition.to_state.final and index == len(text):
+                    return True
+                if index > len(text):
                     return False
-
-        # Se não tiver atingido um estado final, tenta realizar uma última transição épsilon
-        if not current_state.final:
-            for transition in self.transitions:
-                if transition.from_state == current_state:
-                    if transition.label == '&':
-                        current_state = transition.to_state
-                        break
-        return current_state.final
+                else: 
+                    if self.recursive_parser(text, index, transition.to_state):
+                        return True
+                    else:
+                        state = actual_state
+                        index = index - 1
+        
 
     # Verifica uma string é união de linguagens (Retorna as sublinguagens que foram unidas)
     def union_parser(self, text):

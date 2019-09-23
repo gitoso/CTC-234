@@ -31,5 +31,5 @@ for edge in graph.get_edges():
     
     Machine.add_transition(from_state, to_state, label)
 
-Machine.print_graph('novo.dot', view=True)
+Machine.print_source()
     

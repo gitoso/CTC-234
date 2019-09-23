@@ -34,8 +34,8 @@ Machine.add_state(S1)
 Machine.add_transition(S0, S1, regEx)
 
 # Imprime o resultado do passo I
-filename = 'grafos/Q1_grafo_' + str(graph_counter) + '.dot'
-#Machine.print_graph(filename, view=False)
+filename = 'grafos/Q1_grafo_passo_' + str(graph_counter) + '.dot'
+Machine.print_graph(filename, view=False)
 #imagename = filename + '.png'
 #display(Image(filename=#imagename))
 
@@ -77,7 +77,7 @@ while(not automata_ready):
 
     # Imprime o resultado do passo II
     filename = 'grafos/Q1_grafo_' + str(graph_counter) + '.dot'
-    #Machine.print_graph(filename, view=False)
+    Machine.print_graph(filename, view=False)
     #imagename = filename + '.png'
     #display(Image(filename=#imagename))
 
@@ -163,7 +163,7 @@ while(not automata_ready):
 
     # Imprime o resultado do passo III
     filename = 'grafos/Q1_grafo_' + str(graph_counter) + '.dot'
-    #Machine.print_graph(filename, view=False)
+    Machine.print_graph(filename, view=False)
     #imagename = filename + '.png'
     #display(Image(filename=#imagename))
 
@@ -212,7 +212,7 @@ while(not automata_ready):
 
     # Imprime o resultado do passo IV
     filename = 'grafos/Q1_grafo_' + str(graph_counter) + '.dot'
-    #Machine.print_graph(filename, view=False)
+    Machine.print_graph(filename, view=False)
     #imagename = filename + '.png'
     #display(Image(filename=#imagename))
 
@@ -252,11 +252,9 @@ while(not automata_ready):
 # Imprimir a imagem do grafo
 filename='grafos/Q1_grafo_final.dot'
 Machine.print_graph(filename, view=False)
-#imagename = filename + '.png'
-#display(Image(filename=#imagename))
 
-# Imprimir o código do grafo
-Machine.print_source()
+# Printar o código do grafo
+#Machine.print_source()
 
 # Enquanto o usuário desejar, verifica se uma cadeia de caracteres é aceito pelo autômato
 
