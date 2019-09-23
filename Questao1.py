@@ -10,9 +10,9 @@
 ###########################################################
 
 # Importa bibliotecas auxiliares
+from IPython.display import Image, display
 from Automata import *
-import re
-        
+
 # Lê a expressão regular do usuário e constrói o autômato referênte à ela
 regEx = input('Digite a expressão regular: ')
 Machine = Automata()
@@ -35,7 +35,9 @@ Machine.add_transition(S0, S1, regEx)
 
 # Imprime o resultado do passo I
 filename = 'grafos/Q1_grafo_' + str(graph_counter) + '.dot'
-Machine.print_graph(filename, view=False)
+#Machine.print_graph(filename, view=False)
+#imagename = filename + '.png'
+#display(Image(filename=#imagename))
 
 # Incrementa o contador de grafos
 graph_counter = graph_counter + 1
@@ -75,7 +77,9 @@ while(not automata_ready):
 
     # Imprime o resultado do passo II
     filename = 'grafos/Q1_grafo_' + str(graph_counter) + '.dot'
-    Machine.print_graph(filename, view=False)
+    #Machine.print_graph(filename, view=False)
+    #imagename = filename + '.png'
+    #display(Image(filename=#imagename))
 
     # Incrementa o contador de grafos
     graph_counter = graph_counter + 1
@@ -159,7 +163,9 @@ while(not automata_ready):
 
     # Imprime o resultado do passo III
     filename = 'grafos/Q1_grafo_' + str(graph_counter) + '.dot'
-    Machine.print_graph(filename, view=False)
+    #Machine.print_graph(filename, view=False)
+    #imagename = filename + '.png'
+    #display(Image(filename=#imagename))
 
     # Incrementa o contador de grafos
     graph_counter = graph_counter + 1
@@ -206,7 +212,9 @@ while(not automata_ready):
 
     # Imprime o resultado do passo IV
     filename = 'grafos/Q1_grafo_' + str(graph_counter) + '.dot'
-    Machine.print_graph(filename, view=False)
+    #Machine.print_graph(filename, view=False)
+    #imagename = filename + '.png'
+    #display(Image(filename=#imagename))
 
     # Incrementa o contador de grafos
     graph_counter = graph_counter + 1
@@ -242,16 +250,19 @@ while(not automata_ready):
         Machine.delete_transition(transition)
 
 # Imprimir a imagem do grafo
-Machine.print_graph('grafos/Q1_grafo_final.dot', view=False)
+filename='grafos/Q1_grafo_final.dot'
+Machine.print_graph(filename, view=False)
+#imagename = filename + '.png'
+#display(Image(filename=#imagename))
 
 # Imprimir o código do grafo
 Machine.print_source()
 
 # Enquanto o usuário desejar, verifica se uma cadeia de caracteres é aceito pelo autômato
 
-# while True:
-#     text = input('Digite uma string: ')
-#     if Machine.accept_string(text):
-#         print('Válido!')
-#     else:
-#         print('Inválido!')
+while True:
+    text = input('Digite uma string: ')
+    if Machine.accept_string(text):
+        print('Válido!')
+    else:
+        print('Inválido!')

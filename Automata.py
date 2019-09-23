@@ -35,7 +35,7 @@ class Automata:
 
     # Monta o grafo em dot referente ao autômato
     def build_graph(self):
-        self.dot = Digraph(comment='CTC-234')
+        self.dot = Digraph(format='png')
         for state  in self.states:
             if self.states[state].final:
                 self.dot.attr('node', shape='doublecircle')
@@ -60,9 +60,68 @@ class Automata:
     def get_node_count(self):
         return self.node_count
 
+    # Retorna o label da transição a -> b
+    def label_of_transition(self, a, b):
+        label = ''
+        for transition in self.transitions:
+            if transition.from_state == a and transition.to_state == b:
+                label = transition.label
+        return label
+
     # Verifica se uma string é aceita pelo autômato
     def accept_string(self, text):
-        return
+        # Começa no estado inicial
+        current_state = self.initial_state
+
+        # Faz o processamento para cada caractere
+        for c in text:
+
+            # Flags para validar transições epsilon
+            consume_character = False
+            epsilon_transitioned = False
+
+            # Tenta "consumir" o caractere procurando uma transição válida
+            while(not consume_character):
+
+                # Começa testanto as transições "normais" (não épsilon)
+                for transition in self.transitions:
+                    if transition.from_state == current_state:
+                        
+                        # Se for uma transição válida, consome o caractere e altera o estado
+                        if transition.label == c:
+                            current_state = transition.to_state
+                            consume_character = True
+                            epsilon_transitioned = False
+                            break
+
+                
+                # Se não tiver consumido o caractere, tenta as transições épsilon
+                if not consume_character and not epsilon_transitioned:
+                    for transition in self.transitions:
+                        if transition.from_state == current_state:
+
+                            # Se tiver uma transição épsilon válida, altera o estado, sem consumir caractere
+                            if transition.label == '&':
+                                current_state = transition.to_state
+                                epsilon_transitioned = True
+                                break
+
+                    # Se não encontrou transição épsilon, a string já não deve ser aceita
+                    if not epsilon_transitioned:
+                        return False
+                
+                # Se não tiver consumido e tiver vindo de uma transição épsilon, encerra o processamento
+                elif not consume_character:
+                    return False
+
+        # Se não tiver atingido um estado final, tenta realizar uma última transição épsilon
+        if not current_state.final:
+            for transition in self.transitions:
+                if transition.from_state == current_state:
+                    if transition.label == '&':
+                        current_state = transition.to_state
+                        break
+        return current_state.final
 
     # Verifica uma string é união de linguagens (Retorna as sublinguagens que foram unidas)
     def union_parser(self, text):
