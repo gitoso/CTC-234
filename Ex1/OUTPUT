@@ -1,0 +1,22 @@
+Digite a expressão regular: (a+b)*bb(b+a)*
+Digite uma string: ab
+Inválido!
+Possíveis estados: 
+   S6
+   S3
+Digite uma string: abb
+Válido!
+Possíveis estados: 
+   S6
+   S4
+   S3
+Digite uma string: bba
+Válido!
+Possíveis estados: 
+   S6
+   S5
+Digite uma string: abba
+Válido!
+Possíveis estados: 
+   S6
+   S5

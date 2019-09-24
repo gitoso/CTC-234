@@ -1,0 +1,15 @@
+Digite a expressão regular: a*b+b*a
+Digite uma string: ab
+Válido!
+Possíveis estados: 
+   S1
+Digite uma string: abb
+Inválido!
+Possíveis estados: 
+Digite uma string: bba
+Válido!
+Possíveis estados: 
+   S1
+Digite uma string: abba
+Inválido!
+Possíveis estados:

@@ -11,6 +11,8 @@ class Automata:
         self.transitions = set()
         self.node_count = 0
         self.dot = Digraph(comment='e-NFA')
+        self.possivel_states = set()
+        self.valid = False
 
     # Adiciona um novo estado ao autômato
     def add_state(self, state):
@@ -64,6 +66,10 @@ class Automata:
     def get_node_count(self):
         return self.node_count
 
+    # Retorna os estados possíveis após o processamento de uma cadeia pelo autômato
+    def get_possible_states(self):
+        return self.possivel_states
+
     # Retorna o label da transição a -> b
     def label_of_transition(self, a, b):
         label = ''
@@ -74,36 +80,46 @@ class Automata:
 
     # Verifica se uma string é aceita pelo autômato
     def accept_string(self, text):
+        self.valid = False
+        self.possivel_states = set()
+
         for transition in self.transitions:
             transition.from_state.out_transitions.add(transition)
 
         text = list(text)
         index = 0
         start_state = self.get_initial_state()
-        return self.recursive_parser(text, index, start_state)
+        self.recursive_parser(text, index, start_state)
+        return self.valid
 
-        
+    # Função recursiva que avalia a expressão        
     def recursive_parser(self, text, index, state):
         for transition in state.out_transitions:
             actual_state = state
             if transition.label == '&':
                 if transition.to_state.final and index == len(text):
-                    return True
+                    self.valid = True
+                    #return True
                 else:
                     if not self.recursive_parser(text, index, transition.to_state):
                         state = actual_state
                     else:
-                        return True
+                        self.valid = True
+                        #return True
 
             if index < len(text) and transition.label == text[index]:
                 index = index + 1
+                if index == len(text):
+                    self.possivel_states.add(transition.to_state)
                 if transition.to_state.final and index == len(text):
-                    return True
+                    self.valid = True
+                    #return True
                 if index > len(text):
                     return False
                 else: 
                     if self.recursive_parser(text, index, transition.to_state):
-                        return True
+                        self.valid = True
+                        #return True
                     else:
                         state = actual_state
                         index = index - 1

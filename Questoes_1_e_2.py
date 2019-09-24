@@ -264,3 +264,6 @@ while True:
         print('Válido!')
     else:
         print('Inválido!')
+    print('Possíveis estados: ')
+    for state in Machine.get_possible_states():
+        print('   ' + state.label)
