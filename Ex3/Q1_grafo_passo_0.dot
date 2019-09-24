@@ -1,7 +1,0 @@
-digraph {
-	S0 [label=S0]
-	node [shape=doublecircle]
-	S1 [label=S1]
-	node [shape=circle]
-	S0 -> S1 [label="a*b+b*a"]
-}

@@ -1,3 +1,14 @@
+###########################################################
+## CTC-34: Autômata e Linguagens Formais                 ##
+## Prof. Forster                                         ##
+##                                                       ##
+## Equipe:                                               ##
+##   Arthur Fernandes de Morais                          ##
+##   Gianluigi Dal Toso                                  ##
+##   Lucas Alberto Bilobran Lema                         ##
+##                                                       ##
+###########################################################
+
 from Automata import *
 import pydotplus
 

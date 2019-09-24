@@ -80,46 +80,78 @@ class Automata:
 
     # Verifica se uma string é aceita pelo autômato
     def accept_string(self, text):
+
+        # Flag para verificar se o autômato é válido
         self.valid = False
+
+        # Conjunto para salvar os possíveis estados finais do processamento da cadeia de caracteres
         self.possivel_states = set()
 
+        # Facilita o processamento adicionando à cada estado as transições que partem dele
         for transition in self.transitions:
             transition.from_state.out_transitions.add(transition)
 
+        # Iniciliza a validação apontando o index para o caractere na primeira posição
         text = list(text)
         index = 0
+
+        # Começa no estado marcado como estado inicial
         start_state = self.get_initial_state()
+
+        # Percorre de forma recursiva o autômato
         self.recursive_parser(text, index, start_state)
+
+        # Retorna se o autômato é válido ou não
         return self.valid
 
     # Função recursiva que avalia a expressão        
     def recursive_parser(self, text, index, state):
+
+        # Para cada transição possível
         for transition in state.out_transitions:
+
+            # Salva o estado atual
             actual_state = state
+
+            # Se a transição for épsilon, não consome caractere
             if transition.label == '&':
+
+                # Se chegou à um estado final e consumiur todos os caracteres, a cadeia é válida
                 if transition.to_state.final and index == len(text):
                     self.valid = True
-                    #return True
+
+                # Senão, prossegue buscando, recursivamente
                 else:
                     if not self.recursive_parser(text, index, transition.to_state):
                         state = actual_state
                     else:
                         self.valid = True
-                        #return True
 
+            # Se a transição for "normal"
             if index < len(text) and transition.label == text[index]:
+
+                # Aumenta o index (avança um caractere)
                 index = index + 1
+
+                # Se chegou ao fim da cadeia, marca como um estado possível
                 if index == len(text):
                     self.possivel_states.add(transition.to_state)
+                    for next_transition in transition.to_state.out_transitions:
+                        if next_transition.label == '&':
+                            self.possivel_states.add(next_transition.to_state)
+
+                # Verifica se é um estado válido
                 if transition.to_state.final and index == len(text):
                     self.valid = True
-                    #return True
+
+                # Verifica se é inválido
                 if index > len(text):
                     return False
+
+                # Continua a busca, recursivamente  
                 else: 
                     if self.recursive_parser(text, index, transition.to_state):
                         self.valid = True
-                        #return True
                     else:
                         state = actual_state
                         index = index - 1
